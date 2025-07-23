@@ -16,6 +16,12 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "role",
     },
+    email: {
+      type: String,
+      require: [true, "email is required"],
+      trim: true,
+      unique: [true, "Already have account"],
+    },
   },
   { timestamps: true }
 );
