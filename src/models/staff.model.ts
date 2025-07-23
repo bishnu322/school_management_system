@@ -19,6 +19,19 @@ const staffSchema = new Schema(
     },
     salary: {
       type: Number,
+      default: 0,
+    },
+    qualification: {
+      type: String,
+      required: [true, "qualification is required!"],
+    },
+    experienceYear: {
+      type: Number,
+      default: 0,
+    },
+    date_of_join: {
+      type: Date,
+      required: true,
     },
     staff_data: {
       type: Object,

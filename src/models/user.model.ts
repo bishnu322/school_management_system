@@ -33,6 +33,7 @@ const userSchema = new Schema(
     gender: {
       type: Object.values(IGender),
       default: IGender.MALE,
+      required: [true, "gender is required !"],
     },
   },
   { timestamps: true }
