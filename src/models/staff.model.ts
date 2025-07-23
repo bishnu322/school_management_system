@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const staffSchema = new Schema(
   {
-    user: {
+    user_id: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
@@ -19,6 +19,9 @@ const staffSchema = new Schema(
     },
     salary: {
       type: Number,
+    },
+    staff_data: {
+      type: Object,
     },
   },
   { timestamps: true }
