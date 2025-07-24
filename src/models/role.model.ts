@@ -1,12 +1,11 @@
 import { Schema, model } from "mongoose";
 
-// type TRole = "Super Admin" | "Admin" | "Teacher" | "Student" | "Accountant" | "Librarian"  | "In charge";
-
 enum ERole {
-  SUPER_ADMIN = "Super Admin",
+  SUPER_ADMIN = "Super_Admin",
   ADMIN = "Admin",
   TEACHER = "Teacher",
   ACCOUNTANT = "Accountant",
+  STUDENT = "Student",
 }
 
 const roleSchema = new Schema({

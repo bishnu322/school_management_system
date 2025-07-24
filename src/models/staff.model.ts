@@ -12,10 +12,6 @@ const staffSchema = new Schema({
     type: String,
     required: [true, "department is required!"],
   },
-  phone_number: {
-    type: Number,
-    unique: [true, "Already have account"],
-  },
   salary: {
     type: Number,
     default: 0,

@@ -16,12 +16,18 @@ const userSchema = new Schema(
     role: {
       type: Schema.Types.ObjectId,
       ref: "Role",
+      required: true,
     },
     email: {
       type: String,
       require: [true, "email is required"],
       trim: true,
       unique: [true, "Already have account"],
+    },
+    phone_number: {
+      type: Number,
+      required: true,
+      max: 15,
     },
     date_of_birth: {
       type: Date,
