@@ -18,6 +18,10 @@ const classSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Teacher",
   },
+  academicYear: {
+    type: Date,
+    required: true,
+  },
 });
 
 export const Class = model("Class", classSchema);
