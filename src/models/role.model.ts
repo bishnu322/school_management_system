@@ -1,16 +1,19 @@
 import { Schema, model } from "mongoose";
 
-enum ERole {
-  SUPER_ADMIN = "Super_Admin",
-  ADMIN = "Admin",
-  TEACHER = "Teacher",
-  ACCOUNTANT = "Accountant",
-  STUDENT = "Student",
-}
+const ALLOWED_ROLES = [
+  "SUPER_ADMIN",
+  "ADMIN",
+  "TEACHER",
+  "ACCOUNTANT",
+  "STUDENT",
+];
 
 const roleSchema = new Schema({
   role: {
-    type: Object.values(ERole),
+    type: String,
+    enum: ALLOWED_ROLES,
+    required: true,
+    unique: true,
   },
 });
 export const Role = model("Role", roleSchema);

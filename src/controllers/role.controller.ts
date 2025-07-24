@@ -14,6 +14,7 @@ export const createRole = async (
       throw new CustomError("role is required !", 400);
     }
 
+    console.log(role);
     const roles = await Role.create({ role });
 
     await roles.save();
