@@ -1,14 +1,12 @@
+import { asyncHandler } from "./../utils/async-handler.utils";
+import { Staff } from "./../models/staff.model";
 import { NextFunction, Request, Response } from "express";
 import { Student } from "../models/student.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
 import { User } from "../models/user.model";
 
-export const registerStudent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const registerStudent = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
     const {
       // user data
       first_name,
@@ -23,6 +21,15 @@ export const registerStudent = async (
       // student data
       roll_number,
       class_id,
+
+      //staff data
+      employee_id,
+      department,
+      salary,
+      qualification,
+      experienceYear,
+      date_of_join,
+      staff_data,
     } = req.body;
 
     if (!first_name) {
@@ -58,7 +65,5 @@ export const registerStudent = async (
       success: true,
       data: studentRegistration,
     });
-  } catch (error) {
-    next(error);
   }
-};
+);
