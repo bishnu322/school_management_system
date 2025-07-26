@@ -5,10 +5,12 @@ const studentSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+
   class_id: {
     type: Schema.Types.ObjectId,
     ref: "Class",
   },
+
   roll_number: {
     type: Number,
     required: [true, "Roll number is required !"],
