@@ -10,6 +10,13 @@ const staffSchema = new Schema({
     type: Number,
   },
 
+  class_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Class",
+    },
+  ],
+
   department: {
     type: String,
     required: [true, "department is required!"],

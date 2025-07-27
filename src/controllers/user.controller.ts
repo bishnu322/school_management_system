@@ -4,8 +4,9 @@ import { NextFunction, Request, Response } from "express";
 import { Student } from "../models/student.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
 import { User } from "../models/user.model";
+import { Role } from "../models/role.model";
 
-export const registerStudent = asyncHandler(
+export const userRegistration = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const {
       // user data
@@ -32,11 +33,7 @@ export const registerStudent = asyncHandler(
       staff_data,
     } = req.body;
 
-    if (!first_name) {
-      throw new CustomError("first name is required!", 400);
-    }
-
-    const userRegistration = await User.create({
+    const userRegistration = new User({
       first_name,
       last_name,
       email,
@@ -51,19 +48,44 @@ export const registerStudent = asyncHandler(
 
     const user_id = userData._id;
 
-    const studentRegistration = await Student.create({
-      user_id,
-      class_id,
-      roll_number,
-    });
+    const userRole = await Role.findById(role);
 
-    await studentRegistration.save();
+    if (role && userRole?.role === "STUDENT") {
+      const studentRegistration = await Student.create({
+        user_id,
+        class_id,
+        roll_number,
+      });
+
+      await studentRegistration.save();
+    }
+
+    if (
+      (role && role === "TEACHER") ||
+      role === "ADMIN" ||
+      role === "SUPER_ADMIN" ||
+      role === "ACCOUNTANT"
+    ) {
+      const staffRegistration = await Staff.create({
+        employee_id,
+        department,
+        salary,
+        qualification,
+        experienceYear,
+        date_of_join,
+        staff_data,
+      });
+
+      await staffRegistration.save();
+    }
+
+    await userRegistration.save();
 
     res.status(201).json({
-      message: "student registered successfully...",
+      message: `${role}: registered successfully...`,
       status: "Success",
       success: true,
-      data: studentRegistration,
+      data: userRegistration,
     });
   }
 );

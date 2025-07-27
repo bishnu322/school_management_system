@@ -1,17 +1,11 @@
 import { Schema, model } from "mongoose";
-
-const ALLOWED_ROLES = [
-  "SUPER_ADMIN",
-  "ADMIN",
-  "TEACHER",
-  "ACCOUNTANT",
-  "STUDENT",
-];
+import { IAllowedRole } from "../types/global.type";
 
 const roleSchema = new Schema({
   role: {
     type: String,
-    enum: ALLOWED_ROLES,
+    enum: IAllowedRole,
+    default: IAllowedRole.STUDENT,
     required: true,
     unique: true,
   },

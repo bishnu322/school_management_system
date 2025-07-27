@@ -31,7 +31,7 @@ const userSchema = new Schema(
     phone_number: {
       type: Number,
       required: true,
-      max: 15,
+      // max: 15,
     },
 
     date_of_birth: {
@@ -44,7 +44,8 @@ const userSchema = new Schema(
     },
 
     gender: {
-      type: Object.values(IGender),
+      type: String,
+      enum: IGender,
       default: IGender.MALE,
       required: [true, "gender is required !"],
     },

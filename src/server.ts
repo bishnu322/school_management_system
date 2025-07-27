@@ -7,6 +7,7 @@ import {
 import { dbConnection } from "./config/dbConnection.config";
 
 //*importing routers
+import userRouter from "./routes/user.route";
 import studentRouter from "./routes/student.route";
 import roleRouter from "./routes/role.route";
 
@@ -22,6 +23,7 @@ dbConnection(DB_URI);
 app.use(express.json({ limit: "5mb" }));
 
 //* using routers
+app.use("/api/user", userRouter);
 app.use("/api/student", studentRouter);
 app.use("/api/role", roleRouter);
 

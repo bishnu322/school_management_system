@@ -10,11 +10,6 @@ const classSchema = new Schema({
     type: String,
   },
 
-  classTeacher: {
-    type: Schema.Types.ObjectId,
-    ref: "Teacher",
-  },
-
   academicYear: {
     type: Date,
     required: true,

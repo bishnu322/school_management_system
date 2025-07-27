@@ -3,7 +3,7 @@ import { asyncHandler } from "../utils/async-handler.utils";
 import { Staff } from "../models/staff.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
 
-export const createTeacher = asyncHandler(
+export const registerTeacher = asyncHandler(
   async (req: Request, res: Response) => {
     const {
       user_id,
