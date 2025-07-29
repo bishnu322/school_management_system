@@ -89,3 +89,72 @@ export const userRegistration = asyncHandler(
     });
   }
 );
+
+//* get all users
+
+export const getAllUser = asyncHandler(async (req: Request, res: Response) => {
+  const allUsers = await User.find().populate("role");
+
+  res.status(201).json({
+    message: `All user fetched successfully...`,
+    status: "Success",
+    success: true,
+    data: allUsers,
+  });
+});
+
+// * get user by ID
+
+export const getUserById = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id).populate("role");
+
+  if (!user) {
+    throw new CustomError("User not found!", 404);
+  }
+
+  res.status(200).json({
+    message: `user fetched successfully...`,
+    status: "Success",
+    success: true,
+    data: user,
+  });
+});
+
+//* update user
+
+export const updateUser = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload = req.body;
+
+  const user = await User.findByIdAndUpdate(id, { $set: payload }).populate(
+    "role"
+  );
+
+  if (!user) {
+    throw new CustomError("user not found!", 404);
+  }
+
+  res.status(200).json({
+    message: `updated successfully...`,
+    status: "Success",
+    success: true,
+    data: user,
+  });
+});
+
+// * remove user
+
+export const removeUser = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const user = await User.findByIdAndDelete(id);
+
+  res.status(200).json({
+    message: `user deleted successfully...`,
+    status: "Success",
+    success: true,
+    data: user,
+  });
+});
