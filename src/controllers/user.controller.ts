@@ -5,6 +5,7 @@ import { Student } from "../models/student.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
 import { User } from "../models/user.model";
 import { Role } from "../models/role.model";
+import { hashPassword } from "../utils/bcrypt.utils";
 
 export const userRegistration = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -18,6 +19,7 @@ export const userRegistration = asyncHandler(
       address,
       gender,
       role,
+      password,
 
       // student data
       roll_number,
@@ -33,7 +35,12 @@ export const userRegistration = asyncHandler(
       staff_data,
     } = req.body;
 
-    const userRegistration = new User({
+    const userRole = await Role.findById(role);
+    if (!userRole?.role) {
+      throw new CustomError("role not found", 404);
+    }
+
+    const userRegister: any = new User({
       first_name,
       last_name,
       email,
@@ -44,13 +51,16 @@ export const userRegistration = asyncHandler(
       gender,
     });
 
-    const userData = await userRegistration.save();
+    if (!password) {
+      throw new CustomError("password is required!", 400);
+    }
 
-    const user_id = userData._id;
+    const hashedPassword = await hashPassword(password);
+    userRegister.password = hashedPassword;
 
-    const userRole = await Role.findById(role);
+    const { _id: user_id } = await userRegister.save();
 
-    if (role && userRole?.role === "STUDENT") {
+    if (userRole.role === "STUDENT") {
       const studentRegistration = await Student.create({
         user_id,
         class_id,
@@ -58,15 +68,8 @@ export const userRegistration = asyncHandler(
       });
 
       await studentRegistration.save();
-    }
-
-    if (
-      (role && role === "TEACHER") ||
-      role === "ADMIN" ||
-      role === "SUPER_ADMIN" ||
-      role === "ACCOUNTANT"
-    ) {
-      const staffRegistration = await Staff.create({
+    } else {
+      const staffRegistration = new Staff({
         employee_id,
         department,
         salary,
@@ -79,13 +82,11 @@ export const userRegistration = asyncHandler(
       await staffRegistration.save();
     }
 
-    await userRegistration.save();
-
     res.status(201).json({
-      message: `${role}: registered successfully...`,
+      message: `user registered successfully...`,
       status: "Success",
       success: true,
-      data: userRegistration,
+      data: userRegister,
     });
   }
 );
