@@ -14,7 +14,12 @@ const userSchema = new Schema(
       trim: true,
       required: [true, "last name is required!"],
     },
-
+    password: {
+      type: String,
+      required: [true, "password is required"],
+      min: 5,
+      select: false,
+    },
     role: {
       type: Schema.Types.ObjectId,
       ref: "Role",
