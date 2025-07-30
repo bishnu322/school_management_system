@@ -4,64 +4,7 @@ import { Staff } from "../models/staff.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
 import { populate } from "dotenv";
 
-// export const registerTeacher = asyncHandler(
-//   async (req: Request, res: Response) => {
-//     const {
-//       user_id,
-//       employee_id,
-//       department,
-//       salary,
-//       qualification,
-//       experienceYear,
-//       date_of_join,
-//       staff_data,
-//     } = req.body;
-
-//     if (!user_id) {
-//       throw new CustomError("user_id is required !", 400);
-//     }
-
-//     if (!employee_id) {
-//       throw new CustomError("employee_id is required !", 400);
-//     }
-
-//     if (!salary) {
-//       throw new CustomError("salary is required!", 400);
-//     }
-
-//     if (!qualification) {
-//       throw new CustomError("qualification is required!", 400);
-//     }
-
-//     if (!experienceYear) {
-//       throw new CustomError("experience year is required!", 400);
-//     }
-
-//     if (!date_of_join) {
-//       throw new CustomError("joining is required!", 400);
-//     }
-
-//     const teacher = await Staff.create({
-//       user_id,
-//       employee_id,
-//       department,
-//       salary,
-//       qualification,
-//       experienceYear,
-//       date_of_join,
-//       staff_data,
-//     });
-
-//     res.status(201).json({
-//       message: "Staff created successfully",
-//       status: "Success",
-//       success: true,
-//       data: teacher,
-//     });
-//   }
-// );
-
-// get all staffs
+//* get all staffs
 
 export const getAllStaffs = asyncHandler(
   async (req: Request, res: Response) => {
@@ -84,10 +27,20 @@ export const getAllStaffs = asyncHandler(
   }
 );
 
-export const getAllStaffById = asyncHandler(
+//get staff by id
+
+export const getStaffById = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const staff = await Staff.findById(id).populate("role");
+    const staff = await Staff.findById(id)
+      .populate("user_id")
+      .populate({
+        path: "user_id",
+        populate: {
+          path: "role",
+          select: "role",
+        },
+      });
 
     res.status(200).json({
       message: "All staffs fetched Successfully...",

@@ -3,6 +3,8 @@ import { Role } from "../models/role.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
 import { asyncHandler } from "../utils/async-handler.utils";
 
+//* create role
+
 export const createRole = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { role } = req.body;
@@ -23,6 +25,9 @@ export const createRole = asyncHandler(
     });
   }
 );
+
+//* get all role
+
 export const getAllRole = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const roles = await Role.find();
