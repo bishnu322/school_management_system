@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async-handler.utils";
 import { Student } from "../models/student.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
+import { User } from "../models/user.model";
 
 //? getting all students
 
@@ -54,11 +55,16 @@ export const removeStudent = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const student = await Student.findByIdAndDelete(id);
+    const student = await Student.findById(id);
 
     if (!student) {
       throw new CustomError("Student not Found !", 400);
     }
+
+    const user = await User.findByIdAndDelete(student.user_id);
+    console.log(user);
+
+    await student.deleteOne();
 
     res.status(200).json({
       message: "Students removed Successfully...",
