@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async-handler.utils";
 import { Staff } from "../models/staff.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
+import { populate } from "dotenv";
 
 // export const registerTeacher = asyncHandler(
 //   async (req: Request, res: Response) => {
@@ -64,15 +65,35 @@ import { CustomError } from "../middlewares/error-handler.middleware";
 
 export const getAllStaffs = asyncHandler(
   async (req: Request, res: Response) => {
-    const staffs = await Staff.find();
-
-    console.log(staffs);
+    const staffs = await Staff.find()
+      .populate("user_id")
+      .populate({
+        path: "user_id",
+        populate: {
+          path: "role",
+          select: "role", // optional: only return role name
+        },
+      });
 
     res.status(200).json({
       message: "All staffs fetched Successfully...",
       status: "success",
       success: true,
       data: staffs,
+    });
+  }
+);
+
+export const getAllStaffById = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const staff = await Staff.findById(id).populate("role");
+
+    res.status(200).json({
+      message: "All staffs fetched Successfully...",
+      status: "success",
+      success: true,
+      data: staff,
     });
   }
 );

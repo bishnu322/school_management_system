@@ -70,6 +70,7 @@ export const userRegistration = asyncHandler(
       await studentRegistration.save();
     } else {
       const staffRegistration = new Staff({
+        user_id,
         employee_id,
         department,
         salary,

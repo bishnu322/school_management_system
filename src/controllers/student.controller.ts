@@ -1,3 +1,4 @@
+import { populate } from "dotenv";
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async-handler.utils";
 import { Student } from "../models/student.model";
@@ -30,7 +31,15 @@ export const createStudent = asyncHandler(
 
 export const getAllStudent = asyncHandler(
   async (req: Request, res: Response) => {
-    const students = await Student.find().populate("user_id");
+    const students = await Student.find()
+      .populate("user_id")
+      .populate({
+        path: "user_id",
+        populate: {
+          path: "role",
+          select: "role",
+        },
+      });
 
     res.status(200).json({
       message: "All Students fetched Successfully...",

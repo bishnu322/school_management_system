@@ -1,13 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { Role } from "../models/role.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
+import { asyncHandler } from "../utils/async-handler.utils";
 
-export const createRole = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const createRole = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { role } = req.body;
 
     if (!role) {
@@ -24,7 +21,17 @@ export const createRole = async (
       success: true,
       data: roles,
     });
-  } catch (error) {
-    next(error);
   }
-};
+);
+export const getAllRole = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const roles = await Role.find();
+
+    res.status(200).json({
+      message: "All Role fetched successfully",
+      status: "Success",
+      success: true,
+      data: roles,
+    });
+  }
+);
