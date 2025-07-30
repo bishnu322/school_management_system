@@ -30,7 +30,7 @@ export const createStudent = asyncHandler(
 
 export const getAllStudent = asyncHandler(
   async (req: Request, res: Response) => {
-    const students = await Student.find();
+    const students = await Student.find().populate("user_id");
 
     res.status(200).json({
       message: "All Students fetched Successfully...",
@@ -47,7 +47,7 @@ export const getStudentById = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const student = await Student.findById(id);
+    const student = await Student.findById(id).populate("user_id");
 
     if (!student) {
       throw new CustomError("Student not Found !", 400);

@@ -10,6 +10,7 @@ import { dbConnection } from "./config/dbConnection.config";
 import userRouter from "./routes/user.route";
 import studentRouter from "./routes/student.route";
 import roleRouter from "./routes/role.route";
+import staffRouter from "./routes/staff.route";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -26,6 +27,7 @@ app.use(express.json({ limit: "5mb" }));
 app.use("/api/user", userRouter);
 app.use("/api/student", studentRouter);
 app.use("/api/role", roleRouter);
+app.use("/api/staff", staffRouter);
 
 app.get("/", (req, res) => {
   res.send("hello backend");
