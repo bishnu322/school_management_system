@@ -42,8 +42,9 @@ app.get("/{*all}", (req: Request, res: Response, next: NextFunction) => {
 });
 
 //* using error handler middleware
-app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`server is listening on port http://localhost:${PORT}`);
 });
+
+app.use(errorHandler);

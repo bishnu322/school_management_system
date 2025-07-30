@@ -94,7 +94,7 @@ export const updateStudent = asyncHandler(
 
     res.status(200).json({
       message: "Students updated Successfully...",
-      status: "Success",
+      status: "success",
       success: true,
       data: student,
     });

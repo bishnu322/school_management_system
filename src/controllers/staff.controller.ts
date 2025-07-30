@@ -66,13 +66,11 @@ export const getAllStaffs = asyncHandler(
   async (req: Request, res: Response) => {
     const staffs = await Staff.find();
 
-    if (!staffs) {
-      throw new CustomError("Staffs not found!", 404);
-    }
+    console.log(staffs);
 
     res.status(200).json({
       message: "All staffs fetched Successfully...",
-      status: "Success",
+      status: "success",
       success: true,
       data: staffs,
     });
