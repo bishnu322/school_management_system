@@ -80,15 +80,58 @@ export const removeStudent = asyncHandler(
 export const updateStudent = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const updatedData = req.body;
+    const {
+      // user data
+      first_name,
+      last_name,
+      email,
+      phone_number,
+      date_of_birth,
+      address,
+      gender,
+      // student data
+      roll_number,
+      class_id,
+    } = req.body;
 
-    const student = await Student.findByIdAndUpdate(id, { $set: updatedData });
+    // const student = await Student.findByIdAndUpdate(id, { $set: updatedData });
+    const student = await Student.findById(id);
+
+    if (!student) {
+      throw new CustomError("student not found!", 404);
+    }
+
+    if (roll_number !== undefined) student.roll_number = roll_number;
+    if (class_id !== undefined) student.class_id = class_id;
+
+    // await student.updateOne({ $set: { roll_number, class_id } });
+
+    // await student.save();
+
+    const user = await User.findById(student.user_id);
+    if (!user) {
+      throw new CustomError("user not found !", 404);
+    }
+
+    if (first_name !== undefined) user.first_name = first_name;
+    if (last_name !== undefined) user.last_name = last_name;
+    if (email !== undefined) user.email = email;
+    if (phone_number !== undefined) user.phone_number = phone_number;
+    if (date_of_birth !== undefined) user.date_of_birth = date_of_birth;
+    if (address !== undefined) user.address = address;
+    if (gender !== undefined) user.gender = gender;
+
+    await student.save();
+    await user.save();
 
     res.status(200).json({
       message: "Students updated Successfully...",
       status: "success",
       success: true,
-      data: student,
+      data: {
+        user,
+        student,
+      },
     });
   }
 );
