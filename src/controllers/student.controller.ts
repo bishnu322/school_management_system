@@ -80,6 +80,7 @@ export const removeStudent = asyncHandler(
 export const updateStudent = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
+
     const {
       // user data
       first_name,
@@ -94,7 +95,6 @@ export const updateStudent = asyncHandler(
       class_id,
     } = req.body;
 
-    // const student = await Student.findByIdAndUpdate(id, { $set: updatedData });
     const student = await Student.findById(id);
 
     if (!student) {
@@ -104,11 +104,8 @@ export const updateStudent = asyncHandler(
     if (roll_number !== undefined) student.roll_number = roll_number;
     if (class_id !== undefined) student.class_id = class_id;
 
-    // await student.updateOne({ $set: { roll_number, class_id } });
-
-    // await student.save();
-
     const user = await User.findById(student.user_id);
+
     if (!user) {
       throw new CustomError("user not found !", 404);
     }

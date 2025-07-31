@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async-handler.utils";
 import { Staff } from "../models/staff.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
-import { populate } from "dotenv";
 
 //* get all staffs
 
@@ -17,6 +16,10 @@ export const getAllStaffs = asyncHandler(
           select: "role", // optional: only return role name
         },
       });
+
+    if (!staffs) {
+      throw new CustomError("staffs not found", 404);
+    }
 
     res.status(200).json({
       message: "All staffs fetched Successfully...",
@@ -42,6 +45,10 @@ export const getStaffById = asyncHandler(
         },
       });
 
+    if (!staff) {
+      throw new CustomError("staff not found!", 404);
+    }
+
     res.status(200).json({
       message: "All staffs fetched Successfully...",
       status: "success",
@@ -50,3 +57,5 @@ export const getStaffById = asyncHandler(
     });
   }
 );
+
+// * remove staff
