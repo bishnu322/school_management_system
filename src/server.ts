@@ -11,6 +11,7 @@ import userRouter from "./routes/user.route";
 import studentRouter from "./routes/student.route";
 import roleRouter from "./routes/role.route";
 import staffRouter from "./routes/staff.route";
+import authRouter from "./routes/auth.route";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -28,6 +29,7 @@ app.use("/api/user", userRouter);
 app.use("/api/student", studentRouter);
 app.use("/api/role", roleRouter);
 app.use("/api/staff", staffRouter);
+app.use("/api/auth", authRouter);
 
 app.get("/", (req, res) => {
   res.send("hello backend");
