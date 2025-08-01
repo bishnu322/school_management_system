@@ -12,10 +12,13 @@ import studentRouter from "./routes/student.route";
 import roleRouter from "./routes/role.route";
 import staffRouter from "./routes/staff.route";
 import authRouter from "./routes/auth.route";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = process.env.PORT;
 const DB_URI = process.env.DB_URI ?? "";
+
+// app.use(cookieParser());
 
 //* connecting database
 
