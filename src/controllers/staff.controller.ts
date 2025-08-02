@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async-handler.utils";
 import { Staff } from "../models/staff.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
+import { User } from "../models/user.model";
 
 //* get all staffs
 
@@ -59,3 +60,33 @@ export const getStaffById = asyncHandler(
 );
 
 // * remove staff
+
+export const removeStaff = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const staff = await Staff.findById(id);
+
+  if (!staff) {
+    throw new CustomError("staff not found !", 404);
+  }
+
+  const userId = staff.user_id;
+
+  const user = await User.findByIdAndDelete(userId);
+
+  if (!user) {
+    throw new CustomError("user not found !", 404);
+  }
+
+  await staff.deleteOne();
+
+  res.status(200).json({
+    message: "staff removed successfully",
+    status: "Success",
+    success: true,
+    data: {
+      staff,
+      user,
+    },
+  });
+});
