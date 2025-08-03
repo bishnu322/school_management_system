@@ -13,6 +13,6 @@ const router = express.Router();
 router.get("/", getAllStudent);
 router.get("/:id", getStudentById);
 router.delete("/:id", authenticate(Admin), removeStudent);
-router.put("/:id", updateStudent);
+router.put("/:id", authenticate(Admin), updateStudent);
 
 export default router;
