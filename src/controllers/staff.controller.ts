@@ -106,7 +106,6 @@ export const updateStaff = asyncHandler(async (req: Request, res: Response) => {
     address,
     gender,
     role,
-    password,
 
     // staff data
     employee_id,
@@ -120,7 +119,43 @@ export const updateStaff = asyncHandler(async (req: Request, res: Response) => {
 
   const staff = await Staff.findById(id);
 
-  if (!staff) {
-    throw new CustomError("Staff not found!", 404);
-  }
+  if (!staff) throw new CustomError("Staff not found!", 404);
+
+  const user = await User.findById(staff.user_id);
+
+  if (!user) throw new CustomError("user not found!", 404);
+
+  //* update user data model if it changes
+
+  if (first_name) user.first_name = first_name;
+  if (last_name) user.last_name = last_name;
+  if (email) user.email = email;
+  if (phone_number) user.phone_number = phone_number;
+  if (date_of_birth) user.date_of_birth = date_of_birth;
+  if (address) user.address = address;
+  if (gender) user.gender = gender;
+  if (role) user.role = role;
+
+  //* updating staff data
+
+  if (employee_id) staff.employee_id = employee_id;
+  if (department) staff.department = department;
+  if (salary) staff.salary = salary;
+  if (qualification) staff.qualification = qualification;
+  if (experienceYear) staff.experienceYear = experienceYear;
+  if (date_of_join) staff.date_of_join = date_of_join;
+  if (staff_data) staff.staff_data = staff_data;
+
+  await user.save();
+  await staff.save();
+
+  res.status(200).json({
+    message: "staff updated successfully",
+    status: "Success",
+    success: true,
+    data: {
+      user,
+      staff,
+    },
+  });
 });
