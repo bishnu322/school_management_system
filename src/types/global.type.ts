@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 export enum IGender {
   MALE = "MALE",
   FEMALE = "FEMALE",
@@ -10,4 +12,17 @@ export enum IAllowedRole {
   TEACHER = "TEACHER",
   ACCOUNTANT = "ACCOUNTANT",
   STUDENT = "STUDENT",
+}
+
+export interface IjwtPayload {
+  _id: mongoose.Schema.Types.ObjectId;
+  role: IAllowedRole;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
+export interface IjwtDecodedPayload {
+  exp: number;
+  iat: number;
 }
