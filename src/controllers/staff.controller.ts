@@ -90,3 +90,37 @@ export const removeStaff = asyncHandler(async (req: Request, res: Response) => {
     },
   });
 });
+
+// * update staff
+
+export const updateStaff = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const {
+    //user data
+    first_name,
+    last_name,
+    email,
+    phone_number,
+    date_of_birth,
+    address,
+    gender,
+    role,
+    password,
+
+    // staff data
+    employee_id,
+    department,
+    salary,
+    qualification,
+    experienceYear,
+    date_of_join,
+    staff_data,
+  } = req.body;
+
+  const staff = await Staff.findById(id);
+
+  if (!staff) {
+    throw new CustomError("Staff not found!", 404);
+  }
+});
