@@ -1,3 +1,4 @@
+import { Request } from "express";
 import mongoose from "mongoose";
 
 export enum IGender {
@@ -22,7 +23,15 @@ export interface IjwtPayload {
   email: string;
 }
 
-export interface IjwtDecodedPayload {
+export interface IjwtDecodedPayload extends IjwtPayload {
   exp: number;
   iat: number;
 }
+
+export const onlyUser = [IAllowedRole.STUDENT];
+export const superAdmin = [IAllowedRole.SUPER_ADMIN];
+export const Admin = [IAllowedRole.ADMIN];
+
+export type TCustomRequest = Request & {
+  user?: IjwtPayload;
+};
