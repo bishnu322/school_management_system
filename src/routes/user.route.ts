@@ -11,7 +11,7 @@ import { Admin } from "../types/global.type";
 
 const router = express.Router();
 
-router.post("/", authenticate(Admin), userRegistration);
+router.post("/", userRegistration);
 router.get("/", getAllUser);
 router.get("/:id", getUserById);
 router.put("/:id", authenticate(Admin), updateUser);
