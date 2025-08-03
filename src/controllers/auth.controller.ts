@@ -62,7 +62,7 @@ export const changePassword = asyncHandler(
     if (!old_password) throw new CustomError("old password is required!", 400);
     if (!new_password) throw new CustomError("new password is required!", 400);
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       throw new CustomError("user does not exist", 401);
@@ -84,7 +84,6 @@ export const changePassword = asyncHandler(
       message: "password changed successfully",
       status: "Success",
       success: true,
-      data: user,
     });
   }
 );
