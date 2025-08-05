@@ -1,5 +1,5 @@
-export const generatePassword = () => {
-  let password = "";
+export const generatePassword = (): string => {
+  let password: string = "";
   let str =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*?/";
 

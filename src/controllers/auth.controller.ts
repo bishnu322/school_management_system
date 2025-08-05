@@ -11,7 +11,7 @@ import { generateJwtToken, verifyJwtToken } from "../utils/jwt-token.utils";
 export const logInUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  const user: any = await User.findOne({ email: email });
+  const user: any = await User.findOne({ email: email }).populate("role");
 
   // console.log(user);
   if (!user) {
@@ -38,6 +38,8 @@ export const logInUser = asyncHandler(async (req: Request, res: Response) => {
 
   const access_token = await generateJwtToken(payload);
 
+  const { password: pass, ...otherData } = user._doc;
+
   res
     .cookie("access_token", access_token, {
       secure: process.env.NODE_ENV === "development" ? false : true,
@@ -49,7 +51,7 @@ export const logInUser = asyncHandler(async (req: Request, res: Response) => {
       message: "authorized user",
       status: "Success",
       success: true,
-      data: user,
+      data: otherData,
     });
 });
 // * changePassword

@@ -6,6 +6,8 @@ import { CustomError } from "../middlewares/error-handler.middleware";
 import { User } from "../models/user.model";
 import { Role } from "../models/role.model";
 import { hashPassword } from "../utils/bcrypt.utils";
+import { generatePassword } from "../utils/passwordGenerator.utils";
+import { sendMail } from "../utils/mailer.utils";
 
 export const userRegistration = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +21,6 @@ export const userRegistration = asyncHandler(
       address,
       gender,
       role,
-      password,
 
       // student data
       roll_number,
@@ -50,6 +51,9 @@ export const userRegistration = asyncHandler(
       address,
       gender,
     });
+    const password = await generatePassword();
+
+    console.log(password);
 
     if (!password) {
       throw new CustomError("password is required!", 400);
@@ -82,6 +86,14 @@ export const userRegistration = asyncHandler(
 
       await staffRegistration.save();
     }
+
+    await sendMail({
+      to: email,
+      subject: "Login password",
+      html: `<div>Your login password: ${password}</div>
+          <p>please! change your password after login</p>
+      `,
+    });
 
     res.status(201).json({
       message: `user registered successfully...`,

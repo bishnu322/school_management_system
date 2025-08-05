@@ -1,12 +1,12 @@
 import nodemailer, { SendMailOptions } from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: Number(process.env.SMTP_PORT) === 465 ? true : false,
   auth: {
-    user: "gautamkohar110@gmail.com",
-    pass: "gau",
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
   },
 });
 
@@ -28,7 +28,7 @@ export const sendMail = async ({
   bcc = null,
 }: Mailer) => {
   const message: SendMailOptions = {
-    from: `"BA Education Foundation" <gautamkohar110@gmail.com>`,
+    from: `"B A Coder Pvt. Ltd. " <gautamkohar110@gmail.com>`,
     to,
     subject,
     html,
