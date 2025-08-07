@@ -36,6 +36,8 @@ export const userRegistration = asyncHandler(
       staff_data,
     } = req.body;
 
+    const profile_img = req.file as Express.Multer.File;
+
     const userRole = await Role.findById(role);
     if (!userRole?.role) {
       throw new CustomError("role not found", 404);
@@ -51,9 +53,12 @@ export const userRegistration = asyncHandler(
       address,
       gender,
     });
-    const password = await generatePassword();
 
-    console.log(password);
+    userRegister.profile_image = {
+      path: profile_img.path,
+      public_id: profile_img.fieldname,
+    };
+    const password = await generatePassword();
 
     if (!password) {
       throw new CustomError("password is required!", 400);
@@ -83,7 +88,6 @@ export const userRegistration = asyncHandler(
         date_of_join,
         staff_data,
       });
-
       await staffRegistration.save();
     }
 

@@ -58,7 +58,7 @@ const userSchema = new Schema(
       ref: "Attendance",
     },
 
-    profile_img: {
+    profile_image: {
       path: {
         type: String,
       },
