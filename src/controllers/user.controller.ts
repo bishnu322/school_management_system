@@ -8,6 +8,9 @@ import { Role } from "../models/role.model";
 import { hashPassword } from "../utils/bcrypt.utils";
 import { generatePassword } from "../utils/passwordGenerator.utils";
 import { sendMail } from "../utils/mailer.utils";
+import { profileImageUploader } from "../utils/cloudinary.utils";
+
+const folder_name = "user_profile/";
 
 export const userRegistration = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -36,7 +39,7 @@ export const userRegistration = asyncHandler(
       staff_data,
     } = req.body;
 
-    const profile_img = req.file as Express.Multer.File;
+    const profile_image = req.file as Express.Multer.File;
 
     const userRole = await Role.findById(role);
     if (!userRole?.role) {
@@ -54,9 +57,13 @@ export const userRegistration = asyncHandler(
       gender,
     });
 
+    const { public_id, path } = await profileImageUploader(
+      profile_image.path,
+      folder_name
+    );
     userRegister.profile_image = {
-      path: profile_img.path,
-      public_id: profile_img.fieldname,
+      path: path,
+      public_id: public_id,
     };
     const password = await generatePassword();
 
