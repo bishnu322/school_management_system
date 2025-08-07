@@ -8,7 +8,7 @@ import { Role } from "../models/role.model";
 import { hashPassword } from "../utils/bcrypt.utils";
 import { generatePassword } from "../utils/passwordGenerator.utils";
 import { sendMail } from "../utils/mailer.utils";
-import { profileImageUploader } from "../utils/cloudinary.utils";
+import { profileImageUploader } from "../utils/cloudinary-service.utils";
 
 const folder_name = "user_profile/";
 
