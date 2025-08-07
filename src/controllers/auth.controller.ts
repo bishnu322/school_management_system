@@ -52,6 +52,7 @@ export const logInUser = asyncHandler(async (req: Request, res: Response) => {
       status: "Success",
       success: true,
       data: otherData,
+      access_token,
     });
 });
 // * changePassword

@@ -15,8 +15,6 @@ export const authenticate = (role: IAllowedRole[]) => {
 
       const decodedJwtData = await verifyJwtToken(access_token);
 
-      console.log(decodedJwtData);
-
       if (Date.now() > decodedJwtData.exp * 1000) {
         throw new CustomError("Session expire access token", 401);
       }
