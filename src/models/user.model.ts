@@ -52,9 +52,19 @@ const userSchema = new Schema(
       default: IGender.MALE,
       required: [true, "gender is required !"],
     },
+
     attendance: {
       type: Schema.Types.ObjectId,
       ref: "Attendance",
+    },
+
+    profile_img: {
+      path: {
+        type: String,
+      },
+      public_id: {
+        type: String,
+      },
     },
   },
   { timestamps: true }

@@ -6,7 +6,7 @@ import { User } from "../models/user.model";
 import { CustomError } from "../middlewares/error-handler.middleware";
 import { comparePassword, hashPassword } from "../utils/bcrypt.utils";
 import { IjwtPayload } from "../types/global.type";
-import { generateJwtToken, verifyJwtToken } from "../utils/jwt-token.utils";
+import { generateJwtToken } from "../utils/jwt-token.utils";
 
 export const logInUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -52,7 +52,6 @@ export const logInUser = asyncHandler(async (req: Request, res: Response) => {
       status: "Success",
       success: true,
       data: otherData,
-      access_token,
     });
 });
 // * changePassword
