@@ -12,6 +12,7 @@ import studentRouter from "./routes/student.route";
 import roleRouter from "./routes/role.route";
 import staffRouter from "./routes/staff.route";
 import authRouter from "./routes/auth.route";
+import attendanceRouter from "./routes/attendance.route";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -33,6 +34,7 @@ app.use("/api/student", studentRouter);
 app.use("/api/role", roleRouter);
 app.use("/api/staff", staffRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/attendance", attendanceRouter);
 
 app.get("/", (req, res) => {
   res.send("hello backend");

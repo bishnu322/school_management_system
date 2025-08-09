@@ -53,11 +53,6 @@ const userSchema = new Schema(
       required: [true, "gender is required !"],
     },
 
-    attendance: {
-      type: Schema.Types.ObjectId,
-      ref: "Attendance",
-    },
-
     profile_image: {
       path: {
         type: String,
