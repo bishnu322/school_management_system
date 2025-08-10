@@ -77,8 +77,38 @@ export const getAttendanceByUser = asyncHandler(
 
     const attendance = await Attendance.find(filter).populate("userId");
 
-    res.status(201).json({
+    res.status(200).json({
       message: "attendance fetch by user successfully",
+      status: "Success",
+      success: true,
+      data: attendance,
+    });
+  }
+);
+
+// * updating  attendance By id
+
+export const updateAttendance = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const attendance = await Attendance.findById(id);
+
+    if (!attendance) {
+      throw new CustomError("attendance is not there!", 400);
+    }
+
+    if (!status) {
+      throw new CustomError("status field cannot be empty!", 400);
+    }
+
+    attendance.status = status;
+
+    await attendance.save();
+
+    res.status(200).json({
+      message: "user attendance updated successfully",
       status: "Success",
       success: true,
       data: attendance,
