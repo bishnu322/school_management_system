@@ -47,7 +47,7 @@ export const createAttendance = asyncHandler(
   }
 );
 
-// get attendance by userid
+//* get attendance by userid
 
 export const getAttendanceByUser = asyncHandler(
   async (req: Request, res: Response) => {
@@ -86,7 +86,7 @@ export const getAttendanceByUser = asyncHandler(
   }
 );
 
-// * updating  attendance By id
+//* updating  attendance By id
 
 export const updateAttendance = asyncHandler(
   async (req: Request, res: Response) => {
