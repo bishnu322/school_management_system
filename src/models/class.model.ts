@@ -9,11 +9,6 @@ const classSchema = new Schema({
   section: {
     type: String,
   },
-
-  academicYear: {
-    type: Date,
-    required: true,
-  },
 });
 
 export const Class = model("Class", classSchema);
