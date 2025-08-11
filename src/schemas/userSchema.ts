@@ -28,11 +28,6 @@ export const userSchema = z.object({
   address: z.string().min(1, { message: "Address is required" }),
 
   gender: z.enum(IGender, { message: "Valid gender is required" }),
-
-  profile_image: z.object({
-    path: z.string(),
-    public_id: z.string(),
-  }),
 });
 
 type IUserSchema = z.infer<typeof userSchema>;
