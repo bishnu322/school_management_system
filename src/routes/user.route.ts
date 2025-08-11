@@ -9,11 +9,18 @@ import {
 import { authenticate } from "../middlewares/auth.middleware";
 import { Admin } from "../types/global.type";
 import { fileUploader } from "../middlewares/uploader.middleware";
+import { zodValidation } from "../utils/zod-validation.utils";
+import { userSchema } from "../schemas/userSchema";
 
 const router = express.Router();
 const upload = fileUploader();
 
-router.post("/", upload.single("profile_image"), userRegistration);
+router.post(
+  "/",
+  upload.single("profile_image"),
+  zodValidation(userSchema),
+  userRegistration
+);
 router.get("/", getAllUser);
 router.get("/:id", getUserById);
 router.put("/:id", upload.single("profile_img"), updateUser);

@@ -37,6 +37,24 @@ export const userSchema = z.object({
 
 type IUserSchema = z.infer<typeof userSchema>;
 
+export const studentSchema = z.object({
+  class_id: z.string(),
+  roll_number: z.number(),
+});
+
+type IStudentSchema = z.infer<typeof studentSchema>;
+
+export const staffSchema = z.object({
+  employee_id: z.string(),
+  department: z.string(),
+  salary: z.number(),
+  qualification: z.string(),
+  experienceYear: z.number(),
+  date_of_join: z.string(),
+  staff_data: z.object(),
+});
+
+type IStaffSchema = z.infer<typeof staffSchema>;
 // const zodValidate = userSchema.safeParse(req.body);
 
 // zodValidate.success;

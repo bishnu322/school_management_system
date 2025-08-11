@@ -9,6 +9,7 @@ import { hashPassword } from "../utils/bcrypt.utils";
 import { generatePassword } from "../utils/passwordGenerator.utils";
 import { sendMail } from "../utils/mailer.utils";
 import { profileImageUploader } from "../utils/cloudinary-service.utils";
+import { studentSchema } from "../schemas/userSchema";
 
 const folder_name = "user_profile/";
 
@@ -77,6 +78,12 @@ export const userRegistration = asyncHandler(
     const { _id: user_id } = await userRegister.save();
 
     if (userRole.role === "STUDENT") {
+      const parseStudent = studentSchema.safeParse(req.body);
+
+      if (!parseStudent.success) {
+        throw new CustomError(JSON.stringify(parseStudent.error), 400);
+      }
+
       const studentRegistration = await Student.create({
         user_id,
         class_id,
@@ -85,6 +92,12 @@ export const userRegistration = asyncHandler(
 
       await studentRegistration.save();
     } else {
+      const parseStaff = studentSchema.safeParse(req.body);
+
+      if (!parseStaff.success) {
+        throw new CustomError(JSON.stringify(parseStaff.error), 400);
+      }
+
       const staffRegistration = new Staff({
         user_id,
         employee_id,

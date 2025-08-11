@@ -1,5 +1,3 @@
-// * login
-
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async-handler.utils";
 import { User } from "../models/user.model";
@@ -8,6 +6,7 @@ import { comparePassword, hashPassword } from "../utils/bcrypt.utils";
 import { IjwtPayload } from "../types/global.type";
 import { generateJwtToken } from "../utils/jwt-token.utils";
 
+// * login
 export const logInUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
