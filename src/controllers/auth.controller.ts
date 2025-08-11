@@ -91,3 +91,19 @@ export const changePassword = asyncHandler(
 );
 
 // *forget password
+
+export const forgerPassword = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    if (!email) {
+      throw new CustomError("email is required!", 400);
+    }
+
+    const user = await User.find({ email: email });
+
+    if (!user) {
+      throw new CustomError("email is not valid!", 400);
+    }
+  }
+);
