@@ -8,7 +8,7 @@ import { CustomError } from "../middlewares/error-handler.middleware";
 
 export const getAllAttendance = asyncHandler(
   async (req: Request, res: Response) => {
-    const attendance = await Attendance.find({}).populate("userId");
+    const attendance = await Attendance.find({}).populate("user_id");
 
     res.status(200).json({
       message: "all attendance fetched.. ",
@@ -23,16 +23,16 @@ export const getAllAttendance = asyncHandler(
 
 export const createAttendance = asyncHandler(
   async (req: Request, res: Response) => {
-    const { userId, status, date, remark } = req.body;
+    const { user_id, status, date, remark } = req.body;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(user_id);
 
     if (!user) {
       throw new CustomError("User not found, enter valid user!", 404);
     }
 
     const attendance = await Attendance.create({
-      userId,
+      user_id,
       status,
       date,
       remark,
@@ -51,11 +51,11 @@ export const createAttendance = asyncHandler(
 
 export const getAttendanceByUser = asyncHandler(
   async (req: Request, res: Response) => {
-    const { userId } = req.params;
+    const { user_id } = req.params;
 
     const { from_date, to_date } = req.query;
 
-    const filter: Record<string, any> = { userId: userId };
+    const filter: Record<string, any> = { user_id: user_id };
 
     if (from_date || to_date) {
       if (from_date) {
@@ -71,7 +71,7 @@ export const getAttendanceByUser = asyncHandler(
       }
     }
 
-    if (!userId) {
+    if (!user_id) {
       throw new CustomError("Enter valid user, not found!", 400);
     }
 

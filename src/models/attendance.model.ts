@@ -5,13 +5,13 @@ enum StudentStatus {
   PRESENT = "PRESENT",
   SICK_LEAVE = "SICK_LEAVE",
   URGENT_LEAVE = "URGENT_LEAVE",
-  LATE = "LATE",
-  HALF_TIME = "HALF_TIME",
+  // LATE = "LATE",
+  // HALF_TIME = "HALF_TIME",
   PUBLIC_HOLIDAY = "PUBLIC_HOLIDAY",
 }
 
 const attendanceSchema = new Schema({
-  userId: {
+  user_id: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },

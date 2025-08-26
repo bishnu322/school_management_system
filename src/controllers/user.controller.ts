@@ -13,6 +13,8 @@ import { profileImageUploader } from "../utils/cloudinary-service.utils";
 
 const folder_name = "user_profile/";
 
+// register user
+
 export const userRegistration = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const {
