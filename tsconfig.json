@@ -10,9 +10,6 @@
     "strict": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-
-    // FIX 👇 include both default @types AND your custom types
-    "typeRoots": ["./node_modules/@types", "./src/types"],
     "types": ["node", "express"]
   },
   "include": ["src"],
