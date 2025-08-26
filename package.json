@@ -4,9 +4,10 @@
   "description": "school management system",
   "main": "build/server.js",
   "scripts": {
-    "start": "node .build/server.js",
+    "start": "node build/server.js",
     "build": "tsc",
-    "dev": "ts-node-dev ./src/server.ts"
+    "dev": "ts-node-dev ./src/server.ts",
+    "lint": "tsc --noEmit"
   },
   "author": "bishnu_kohar",
   "license": "ISC",
