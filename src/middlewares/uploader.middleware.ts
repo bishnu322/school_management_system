@@ -16,7 +16,7 @@ export const fileUploader = () => {
       }
       cb(null, folder_name);
     },
-    filename: (req, file, cb) => {
+    filename: (req: any, file, cb) => {
       const unique_name = Date.now() + "-" + file.originalname;
 
       cb(null, unique_name);
