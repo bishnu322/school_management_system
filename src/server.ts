@@ -5,6 +5,7 @@ import {
   errorHandler,
 } from "./middlewares/error-handler.middleware";
 import { dbConnection } from "./config/dbConnection.config";
+import cors from "cors";
 
 //*importing routers
 import userRouter from "./routes/user.route";
@@ -20,6 +21,7 @@ const PORT = process.env.PORT;
 const DB_URI = process.env.DB_URI ?? "";
 
 app.use(cookieParser());
+app.use(cors());
 
 //* connecting database
 
