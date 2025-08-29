@@ -9,6 +9,9 @@ import { hashPassword } from "../utils/bcrypt.utils";
 import { generatePassword } from "../utils/passwordGenerator.utils";
 import { sendMail } from "../utils/mailer.utils";
 import { profileImageUploader } from "../utils/cloudinary-service.utils";
+import { success } from "zod";
+import { verifyJwtToken } from "../utils/jwt-token.utils";
+
 // import { staffSchema, studentSchema } from "../schemas/userSchema";
 
 const folder_name = "user_profile/";
@@ -44,7 +47,7 @@ export const userRegistration = asyncHandler(
 
     const profile_image = req.file as Express.Multer.File;
 
-    const userRole = await Role.findById(role);
+    const userRole = await Role.findById(role).populate("role");
 
     if (!userRole?.role) {
       throw new CustomError("role not found", 404);
@@ -185,5 +188,15 @@ export const removeUser = asyncHandler(async (req: Request, res: Response) => {
     status: "Success",
     success: true,
     data: user,
+  });
+});
+
+// * user is logged in or not
+export const checkAuth = asyncHandler(async (req: Request, res: Response) => {
+  if (!("user" in req)) return res.status(401).send("user not found");
+
+  return res.status(200).json({
+    loggedIn: true,
+    user: req.user,
   });
 });

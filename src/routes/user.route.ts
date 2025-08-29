@@ -1,5 +1,6 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import {
+  checkAuth,
   getAllUser,
   getUserById,
   removeUser,
@@ -13,10 +14,12 @@ import { fileUploader } from "../middlewares/uploader.middleware";
 const router = express.Router();
 const upload = fileUploader();
 
+router.get("/authorize", authenticate([]), checkAuth);
+
 router.post("/", upload.single("profile_image"), userRegistration);
 router.get("/", getAllUser);
 router.get("/:id", getUserById);
-router.put("/:id", upload.single("profile_img"), updateUser);
+router.put("/:id", upload.single("profile_image"), updateUser);
 router.delete("/:id", authenticate(Admin), removeUser);
 
 export default router;

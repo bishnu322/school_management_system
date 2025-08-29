@@ -17,7 +17,9 @@ export enum IAllowedRole {
 
 export interface IjwtPayload {
   _id: mongoose.Schema.Types.ObjectId;
-  role: IAllowedRole;
+  role: {
+    role: IAllowedRole;
+  };
   first_name: string;
   last_name: string;
   email: string;

@@ -25,7 +25,11 @@ export const authenticate = (role: IAllowedRole[]) => {
         throw new CustomError("Unauthorized access token", 401);
       }
 
-      if (role && !role.includes(decodedJwtData.role)) {
+      if (
+        role &&
+        role.length !== 0 &&
+        !role.includes(decodedJwtData.role.role)
+      ) {
         throw new CustomError("forbidden access denied !", 403);
       }
 

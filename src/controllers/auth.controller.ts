@@ -41,8 +41,9 @@ export const logInUser = asyncHandler(async (req: Request, res: Response) => {
 
   res
     .cookie("access_token", access_token, {
-      secure: process.env.NODE_ENV === "development" ? false : true,
+      secure: false,
       httpOnly: true,
+      sameSite: "lax",
       maxAge: Number(process.env.COOKIE_EXPIRY) * 24 * 60 * 60 * 1000,
     })
     .status(200)
@@ -53,6 +54,7 @@ export const logInUser = asyncHandler(async (req: Request, res: Response) => {
       data: otherData,
     });
 });
+
 // * changePassword
 
 export const changePassword = asyncHandler(
@@ -106,3 +108,19 @@ export const forgerPassword = asyncHandler(
     }
   }
 );
+
+// * logout user
+
+export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    secure: false, // true in prod
+    sameSite: "lax",
+  });
+
+  return res.status(200).json({
+    message: "Logged out successfully",
+    success: true,
+    status: "Success",
+  });
+});
