@@ -12,8 +12,6 @@ import { profileImageUploader } from "../utils/cloudinary-service.utils";
 import { success } from "zod";
 import { verifyJwtToken } from "../utils/jwt-token.utils";
 
-// import { staffSchema, studentSchema } from "../schemas/userSchema";
-
 const folder_name = "user_profile/";
 
 // register user

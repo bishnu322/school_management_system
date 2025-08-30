@@ -7,8 +7,7 @@ const studentSchema = new Schema({
   },
 
   class_id: {
-    type: Schema.Types.ObjectId,
-    ref: "Class",
+    type: String,
   },
 
   roll_number: {

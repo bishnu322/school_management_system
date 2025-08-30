@@ -9,15 +9,25 @@ import { User } from "../models/user.model";
 
 export const getAllStudent = asyncHandler(
   async (req: Request, res: Response) => {
-    const students = await Student.find()
-      .populate("user_id")
-      .populate({
-        path: "user_id",
-        populate: {
-          path: "role",
-          select: "role",
-        },
-      });
+    const { query, role } = req.query;
+
+    // Populate user and role
+    let students = await Student.find().populate({
+      path: "user_id",
+      match: {
+        ...(query && {
+          $or: [
+            { first_name: { $regex: query, $options: "i" } },
+            { email: { $regex: query, $options: "i" } },
+          ],
+        }),
+        ...(role && { "role.role": role }),
+      },
+      populate: { path: "role", select: "role" },
+    });
+
+    // Remove students where user_id didn't match
+    students = students.filter((s) => s.user_id);
 
     res.status(200).json({
       message: "All Students fetched Successfully...",
