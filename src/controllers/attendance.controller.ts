@@ -8,7 +8,7 @@ import { CustomError } from "../middlewares/error-handler.middleware";
 
 export const getAllAttendance = asyncHandler(
   async (req: Request, res: Response) => {
-    const attendance = await Attendance.find({}).populate("user_id");
+    const attendance = await Attendance.find({});
 
     res.status(200).json({
       message: "all attendance fetched.. ",
@@ -23,7 +23,11 @@ export const getAllAttendance = asyncHandler(
 
 export const createAttendance = asyncHandler(
   async (req: Request, res: Response) => {
-    const { user_id, status, date, remark } = req.body;
+    const { user_id, status, date } = req.body;
+
+    if (!user_id) {
+      throw new CustomError("user_id not found", 404);
+    }
 
     const user = await User.findById(user_id);
 
@@ -35,7 +39,6 @@ export const createAttendance = asyncHandler(
       user_id,
       status,
       date,
-      remark,
     });
 
     res.status(201).json({
@@ -55,7 +58,11 @@ export const getAttendanceByUser = asyncHandler(
 
     const { from_date, to_date } = req.query;
 
-    const filter: Record<string, any> = { user_id: user_id };
+    if (!user_id) {
+      throw new CustomError("Enter valid user, not found!", 400);
+    }
+
+    const filter: Record<string, any> = { user_id };
 
     if (from_date || to_date) {
       if (from_date) {
@@ -71,11 +78,7 @@ export const getAttendanceByUser = asyncHandler(
       }
     }
 
-    if (!user_id) {
-      throw new CustomError("Enter valid user, not found!", 400);
-    }
-
-    const attendance = await Attendance.find(filter).populate("userId");
+    const attendance = await Attendance.findOne(filter).populate("user_id");
 
     res.status(200).json({
       message: "attendance fetch by user successfully",
@@ -91,9 +94,9 @@ export const getAttendanceByUser = asyncHandler(
 export const updateAttendance = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, date } = req.body;
 
-    const attendance = await Attendance.findById(id);
+    const attendance = await Attendance.findById(id).populate("user_id");
 
     if (!attendance) {
       throw new CustomError("attendance is not there!", 400);
@@ -103,7 +106,12 @@ export const updateAttendance = asyncHandler(
       throw new CustomError("status field cannot be empty!", 400);
     }
 
+    if (!date) {
+      throw new CustomError("date field cannot be empty!", 400);
+    }
+
     attendance.status = status;
+    attendance.date = date;
 
     await attendance.save();
 

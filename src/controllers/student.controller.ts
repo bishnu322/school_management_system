@@ -9,29 +9,77 @@ import { User } from "../models/user.model";
 
 export const getAllStudent = asyncHandler(
   async (req: Request, res: Response) => {
-    const { query, role } = req.query;
+    const { query, role, date } = req.query;
 
-    // Populate user and role
-    let students = await Student.find().populate({
-      path: "user_id",
-      match: {
-        ...(query && {
-          $or: [
-            { first_name: { $regex: query, $options: "i" } },
-            { email: { $regex: query, $options: "i" } },
-          ],
-        }),
-        ...(role && { "role.role": role }),
+    // ensure date is valid
+    const targetDate = date ? new Date(date as string) : null;
+
+    // build filters
+    const userMatch: any = {};
+    if (query) {
+      userMatch.$or = [
+        { first_name: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+      ];
+    }
+    if (role) {
+      userMatch["role.role"] = role;
+    }
+
+    // aggregate
+    const students = await Student.aggregate([
+      {
+        $lookup: {
+          from: "users", // collection name of User
+          localField: "user_id",
+          foreignField: "_id",
+          as: "user",
+        },
       },
-      populate: { path: "role", select: "role" },
-    });
-
-    // Remove students where user_id didn't match
-    students = students.filter((s) => s.user_id);
+      { $unwind: "$user" },
+      { $match: userMatch },
+      {
+        $lookup: {
+          from: "attendances", // collection name of Attendance
+          let: { userId: "$user._id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$user_id", "$$userId"] } } },
+            ...(targetDate
+              ? [
+                  {
+                    $match: {
+                      date: {
+                        $gte: new Date(targetDate.setHours(0, 0, 0, 0)),
+                        $lt: new Date(targetDate.setHours(23, 59, 59, 999)),
+                      },
+                    },
+                  },
+                ]
+              : []),
+          ],
+          as: "attendance",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          roll_number: 1,
+          class_id: 1,
+          user: {
+            first_name: 1,
+            last_name: 1,
+            email: 1,
+            phone_number: 1,
+            role: 1,
+            gender: 1,
+          },
+          attendance: 1,
+        },
+      },
+    ]);
 
     res.status(200).json({
-      message: "All Students fetched Successfully...",
-      status: "Success",
+      message: "Students with attendance fetched successfully",
       success: true,
       data: students,
     });
