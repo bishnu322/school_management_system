@@ -8,9 +8,9 @@ import {
 
 const router = express.Router();
 
+router.get("/:user_id", getAttendanceByUser);
+router.get("/", getAllAttendance);
 router.post("/", createAttendance);
 router.put("/:id", updateAttendance);
-router.get("/:userId", getAttendanceByUser);
-router.get("/", getAllAttendance);
 
 export default router;

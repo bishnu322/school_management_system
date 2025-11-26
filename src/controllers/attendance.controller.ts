@@ -56,6 +56,8 @@ export const getAttendanceByUser = asyncHandler(
   async (req: Request, res: Response) => {
     const { user_id } = req.params;
 
+    // console.log(user_id);
+
     const { from_date, to_date } = req.query;
 
     if (!user_id) {
@@ -78,8 +80,7 @@ export const getAttendanceByUser = asyncHandler(
       }
     }
 
-    const attendance = await Attendance.findOne(filter).populate("user_id");
-
+    const attendance = await Attendance.find(filter);
     res.status(200).json({
       message: "attendance fetch by user successfully",
       status: "Success",

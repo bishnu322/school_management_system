@@ -91,18 +91,93 @@ export const getAllStudent = asyncHandler(
 export const getStudentById = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
+    const { from_date, to_date } = req.query;
 
-    const student = await Student.findById(id).populate("user_id");
+    const mongoose = require("mongoose");
+    const studentId = new mongoose.Types.ObjectId(id);
 
-    if (!student) {
-      throw new CustomError("Student not Found !", 400);
+    // Build attendance date filter
+    const dateFilter: any = {};
+    if (from_date || to_date) {
+      dateFilter.date = {};
+      if (from_date) dateFilter.date.$gte = new Date(from_date as string);
+      if (to_date) dateFilter.date.$lte = new Date(to_date as string);
+    }
+
+    const student = await Student.aggregate([
+      { $match: { _id: studentId } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_id",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $lookup: {
+          from: "attendances",
+          let: { userId: "$user._id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$user_id", "$$userId"] },
+                ...dateFilter,
+              },
+            },
+            { $sort: { date: -1 } },
+          ],
+          as: "attendance",
+        },
+      },
+      {
+        $lookup: {
+          from: "roles",
+          localField: "user.role",
+          foreignField: "_id",
+          as: "user.role",
+        },
+      },
+      {
+        $unwind: {
+          path: "$user.role",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          roll_number: 1,
+          class_id: 1,
+          user: {
+            _id: 1,
+            first_name: 1,
+            last_name: 1,
+            email: 1,
+            phone_number: 1,
+            address: 1,
+            date_of_birth: 1,
+            gender: 1,
+            profile_image: 1,
+            role: 1,
+            createdAt: 1,
+            updatedAt: 1,
+          },
+          attendance: 1,
+        },
+      },
+    ]);
+
+    if (!student || student.length === 0) {
+      throw new CustomError("Student not Found!", 404);
     }
 
     res.status(200).json({
-      message: "Student fetched Successfully...",
+      message: "Student with attendance fetched successfully",
       status: "Success",
       success: true,
-      data: student,
+      data: student[0],
     });
   }
 );
