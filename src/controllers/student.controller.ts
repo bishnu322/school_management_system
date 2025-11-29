@@ -66,6 +66,7 @@ export const getAllStudent = asyncHandler(
           roll_number: 1,
           class_id: 1,
           user: {
+            _id: 1,
             first_name: 1,
             last_name: 1,
             email: 1,

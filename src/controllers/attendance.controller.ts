@@ -107,12 +107,12 @@ export const updateAttendance = asyncHandler(
       throw new CustomError("status field cannot be empty!", 400);
     }
 
-    if (!date) {
-      throw new CustomError("date field cannot be empty!", 400);
-    }
+    // if (!date) {
+    //   throw new CustomError("date field cannot be empty!", 400);
+    // }
 
     attendance.status = status;
-    attendance.date = date;
+    // attendance.date = date;
 
     await attendance.save();
 
